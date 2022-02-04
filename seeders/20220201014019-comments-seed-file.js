@@ -1,5 +1,5 @@
 'use strict'
-
+const faker = require('faker')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const [users, restaurants] = await Promise.all([queryInterface.sequelize.query(
@@ -14,7 +14,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('Comments',
       Array.from({ length: 50 }, () => ({
-        text: 'good to eat',
+        text: faker.lorem.text(),
         user_id: users[Math.floor(Math.random() * users.length)].id,
         restaurant_id: restaurants[Math.floor(Math.random() * restaurants.length)].id,
         created_at: new Date(),
