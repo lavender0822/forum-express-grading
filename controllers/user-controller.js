@@ -44,16 +44,22 @@ const userController = {
     const DEFAULT_COMMENT_COUNT = 0
 
     return User.findByPk(req.params.id, {
-      include:
+      include: [
         { model: Comment, include: Restaurant },
-      group: 'Comments.restaurant_id'
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' },
+        { model: Restaurant, as: 'FavoritedRestaurants' }
+      ]
     })
       .then(user => {
         if (!user) throw new Error("User doesn't exist")
         user = user.toJSON()
-        const count = user.Comments?.length || DEFAULT_COMMENT_COUNT
+        const commentCount = user.Comments?.length || DEFAULT_COMMENT_COUNT
+        const followingCount = user.Followings?.length || DEFAULT_COMMENT_COUNT
+        const followerCount = user.Followers?.length || DEFAULT_COMMENT_COUNT
+        const favoritedCount = user.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT
 
-        return res.render('users/profile', { user, count, sessionUser })
+        return res.render('users/profile', { user, commentCount, followingCount, followerCount, favoritedCount, sessionUser })
       })
       .catch(err => next(err))
   },
