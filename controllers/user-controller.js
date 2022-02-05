@@ -216,7 +216,10 @@ const userController = {
       .then(([user, followship]) => {
         if (!user) throw new Error("User didn't exist!")
         if (followship) throw new Error('You are already following this user!')
-        return followship.create()
+        return Followship.create({
+          followerId: req.user.id,
+          followingId: userId
+        })
       })
       .then(() => res.redirect('back'))
       .catch(err => next(err))
