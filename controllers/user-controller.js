@@ -44,16 +44,22 @@ const userController = {
     const DEFAULT_COMMENT_COUNT = 0
 
     return User.findByPk(req.params.id, {
-      include:
+      include: [
         { model: Comment, include: Restaurant },
-      group: 'Comments.restaurant_id'
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' },
+        { model: Restaurant, as: 'FavoritedRestaurants' }
+      ]
     })
       .then(user => {
         if (!user) throw new Error("User doesn't exist")
         user = user.toJSON()
-        const count = user.Comments?.length || DEFAULT_COMMENT_COUNT
+        const commentCount = user.Comments?.length || DEFAULT_COMMENT_COUNT
+        const followingCount = user.Followings?.length || DEFAULT_COMMENT_COUNT
+        const followerCount = user.Followers?.length || DEFAULT_COMMENT_COUNT
+        const favoritedCount = user.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT
 
-        return res.render('users/profile', { user, count, sessionUser })
+        return res.render('users/profile', { user, commentCount, followingCount, followerCount, favoritedCount, sessionUser })
       })
       .catch(err => next(err))
   },
@@ -200,7 +206,7 @@ const userController = {
     const { userId } = req.params
     Promise.all([
       User.findByPk(userId),
-      Followship.findOne({
+      Followship.create({
         where: {
           followerId: req.user.id,
           followingId: req.params.userId
@@ -210,10 +216,6 @@ const userController = {
       .then(([user, followship]) => {
         if (!user) throw new Error("User didn't exist!")
         if (followship) throw new Error('You are already following this user!')
-        return Followship.create({
-          followerId: req.user.id,
-          followingId: userId
-        })
       })
       .then(() => res.redirect('back'))
       .catch(err => next(err))
