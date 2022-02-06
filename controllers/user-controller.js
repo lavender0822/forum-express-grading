@@ -54,7 +54,18 @@ const userController = {
       .then(user => {
         if (!user) throw new Error("User doesn't exist")
         user = user.toJSON()
-        const commentCount = user.Comments?.length || DEFAULT_COMMENT_COUNT
+
+        // 刪除評論重複的餐廳
+        user.commentedRestaurants = user.Comments.reduce((acc, c) => {
+          if (!acc.some(r => r.id === c.restaurantId)) {
+            acc.push(c.Restaurant)
+          }
+          return acc
+        }, [])
+
+        console.log(user)
+
+        const commentCount = user.commentedRestaurants?.length || DEFAULT_COMMENT_COUNT
         const followingCount = user.Followings?.length || DEFAULT_COMMENT_COUNT
         const followerCount = user.Followers?.length || DEFAULT_COMMENT_COUNT
         const favoritedCount = user.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT

@@ -9,8 +9,22 @@ const ifCond = (a, b, options) => {
   return a === b ? options.fn(this) : options.inverse(this)
 }
 
+const ifAdmin = (a, b, options) => {
+  if (b) {
+    return b.isAdmin ? options.fn(this) : options.inverse(this)
+  } else {
+    return a.isAdmin ? options.fn(this) : options.inverse(this)
+  }
+}
+
+const sessionJudge = (a, b, options) => {
+  return b ? options.fn(this) : options.inverse(this)
+}
+
 module.exports = {
   currentYear,
   relativeTimeFromNow: a => dayjs(a).fromNow(),
-  ifCond
+  ifCond,
+  ifAdmin,
+  sessionJudge
 }
