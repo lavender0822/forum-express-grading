@@ -42,8 +42,10 @@ const userController = {
   getUser: (req, res, next) => {
     const sessionUser = req.user
     const DEFAULT_COMMENT_COUNT = 0
+    const { id } = req.params
+    console.log(id)
 
-    return User.findByPk(req.params.id, {
+    return User.findByPk(id, {
       include: [
         { model: Comment, include: Restaurant },
         { model: User, as: 'Followings' },
@@ -63,9 +65,6 @@ const userController = {
           return acc
         }, [])
 
-        console.log(req.user.id)
-        console.log(result.Followers[0].id)
-        console.log(result.Followers.some(f => f.id === req.user.id))
         const isFollowed = result.Followers.some(f => f.id === req.user.id)
         const commentCount = result.commentedRestaurants?.length || DEFAULT_COMMENT_COUNT
         const followingCount = result.Followings?.length || DEFAULT_COMMENT_COUNT

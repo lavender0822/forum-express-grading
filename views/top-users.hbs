@@ -4,6 +4,7 @@
 <div class="row" style="text-align: center;">
   {{#each users}}
     <div class="col-3">
+      <p>{{this.id}}</p>
       <a href="/users/{{this.id}}">
         {{#if this.image}}
           <img src="{{this.image}}" width="140px" height="140px" style="transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;" />
