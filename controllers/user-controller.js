@@ -43,7 +43,6 @@ const userController = {
     const sessionUser = req.user
     const DEFAULT_COMMENT_COUNT = 0
     const { id } = req.params
-    console.log(id)
 
     return User.findByPk(id, {
       include: [
@@ -70,7 +69,6 @@ const userController = {
         const followingCount = result.Followings?.length || DEFAULT_COMMENT_COUNT
         const followerCount = result.Followers?.length || DEFAULT_COMMENT_COUNT
         const favoritedCount = result.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT
-        // console.log(isFollowed)
 
         return res.render('users/profile', { user: result, commentCount, followingCount, followerCount, favoritedCount, sessionUser, isFollowed })
       })
