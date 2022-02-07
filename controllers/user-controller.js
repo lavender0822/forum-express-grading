@@ -53,24 +53,27 @@ const userController = {
     })
       .then(user => {
         if (!user) throw new Error("User doesn't exist")
-        user = user.toJSON()
+        const result = user.toJSON()
 
         // 刪除評論重複的餐廳
-        user.commentedRestaurants = user.Comments.reduce((acc, c) => {
+        result.commentedRestaurants = result.Comments.reduce((acc, c) => {
           if (!acc.some(r => r.id === c.restaurantId)) {
             acc.push(c.Restaurant)
           }
           return acc
         }, [])
 
-        console.log(user)
+        console.log(req.user.id)
+        console.log(result.Followers[0].id)
+        console.log(result.Followers.some(f => f.id === req.user.id))
+        const isFollowed = result.Followers.some(f => f.id === req.user.id)
+        const commentCount = result.commentedRestaurants?.length || DEFAULT_COMMENT_COUNT
+        const followingCount = result.Followings?.length || DEFAULT_COMMENT_COUNT
+        const followerCount = result.Followers?.length || DEFAULT_COMMENT_COUNT
+        const favoritedCount = result.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT
+        // console.log(isFollowed)
 
-        const commentCount = user.commentedRestaurants?.length || DEFAULT_COMMENT_COUNT
-        const followingCount = user.Followings?.length || DEFAULT_COMMENT_COUNT
-        const followerCount = user.Followers?.length || DEFAULT_COMMENT_COUNT
-        const favoritedCount = user.FavoritedRestaurants?.length || DEFAULT_COMMENT_COUNT
-
-        return res.render('users/profile', { user, commentCount, followingCount, followerCount, favoritedCount, sessionUser })
+        return res.render('users/profile', { user: result, commentCount, followingCount, followerCount, favoritedCount, sessionUser, isFollowed })
       })
       .catch(err => next(err))
   },
@@ -197,7 +200,7 @@ const userController = {
 
   getTopUsers: (req, res, next) => {
     // 撈出所有 User 與 followers 資料
-    const reqUser = req.user
+    const sessionUser = req.user
     return User.findAll({
       include: [{ model: User, as: 'Followers' }]
     })
@@ -209,7 +212,7 @@ const userController = {
             isFollowed: req.user.Followings.some(f => f.id === user.id)
           }))
           .sort((a, b) => b.followerCount - a.followerCount)
-        res.render('top-users', { users: result, reqUser })
+        res.render('top-users', { users: result, sessionUser })
       })
       .catch(err => next(err))
   },
