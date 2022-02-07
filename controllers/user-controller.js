@@ -197,6 +197,7 @@ const userController = {
 
   getTopUsers: (req, res, next) => {
     // 撈出所有 User 與 followers 資料
+    const reqUser = req.user
     return User.findAll({
       include: [{ model: User, as: 'Followers' }]
     })
@@ -208,7 +209,7 @@ const userController = {
             isFollowed: req.user.Followings.some(f => f.id === user.id)
           }))
           .sort((a, b) => b.followerCount - a.followerCount)
-        res.render('top-users', { users: result })
+        res.render('top-users', { users: result, reqUser })
       })
       .catch(err => next(err))
   },
