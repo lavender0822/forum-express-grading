@@ -56,7 +56,8 @@
       <ul class="d-flex flex-wrap align-items-center">
         {{#each user.commentedRestaurants}}
         <li class="m-1" style="max-width: 100px; list-style-type: none;">
-          <a href="/restaurants/{{this.Restaurant.id}}">
+          <p>{{this.name}}</p>
+          <a href="/restaurants/{{this.id}}">
             <img class="w-100" src="{{this.image}}" alt="restaurant image">
           </a>
         </li>
