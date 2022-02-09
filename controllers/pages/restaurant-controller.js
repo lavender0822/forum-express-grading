@@ -1,50 +1,9 @@
 const { Restaurant, Category, Comment, User } = require('../../models')
-const { getOffset, getPagination } = require('../../helpers/pagination-helper')
+const restaurantServices = require('../../services/restaurant-services')
+
 const restaurantController = {
-  getRestaurants: (req, res) => {
-    const DEFAULT_LIMIT = 9
-
-    const categoryId = Number(req.query.categoryId) || ''
-
-    const page = Number(req.query.page) || 1
-    const limit = Number(req.query.limit) || DEFAULT_LIMIT
-    const offset = getOffset(limit, page)
-    return Promise.all([
-      Restaurant.findAndCountAll({
-        include: Category,
-        where: { // 新增查詢條件
-          ...categoryId ? { categoryId } : {} // 檢查 categoryId 是否為空值
-        },
-        limit,
-        offset,
-        nest: true,
-        raw: true
-      }),
-      Category.findAll({ raw: true })
-    ])
-      .then(([restaurants, categories]) => {
-        const favoritedRestaurantsId = req.user && req.user.FavoritedRestaurants.map(fr => fr.id)
-        // 可以命名的提早命名，避免在 loop 內命名，節省程式運行成本
-
-        const likedRestaurantsId = req.user && req.user.LikedRestaurants.map(lr => lr.id)
-
-        const data = restaurants.rows.map(r => ({
-          ...r,
-          description: r.description.substring(0, 50),
-          // 擷取50字
-
-          isFavorited: favoritedRestaurantsId.includes(r.id),
-          // 判定是否被 User 收藏
-
-          isLiked: likedRestaurantsId.includes(r.id)
-        }))
-        return res.render('restaurants', {
-          restaurants: data,
-          categories,
-          categoryId,
-          pagination: getPagination(limit, page, restaurants.count)
-        })
-      })
+  getRestaurants: (req, res, next) => {
+    restaurantServices.getRestaurants(req, (err, data) => err ? next(err) : res.render('restaurants', data))
   },
 
   getRestaurant: (req, res, next) => {
