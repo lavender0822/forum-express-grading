@@ -38,6 +38,7 @@ const restaurantController = {
           pagination: getPagination(limit, page, restaurants.count)
         })
       })
+      .catch(err => cb(err))
   }
 }
 
