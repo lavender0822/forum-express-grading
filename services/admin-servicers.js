@@ -8,6 +8,16 @@ const adminController = {
       include: [Category]
     })
       .then(restaurants => cb(null, { restaurants }))
+  },
+
+  deleteRestaurant: (req, cb) => {
+    Restaurant.findByPk(req.params.id)
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        return restaurant.destroy()
+      })
+      .then(deletedRestaurant => cb(null, { restaurant: deletedRestaurant }))
+      .catch(err => cb(err))
   }
 }
 
