@@ -11,7 +11,7 @@
       <p>{{favoritedCount}} 收藏的餐廳</p>
       <p>{{followingCount}} followings(追蹤者)</p>
       <p>{{followerCount}} followers(追隨者)</p>
-      {{#ifCond user.id sessionUser}}
+      {{#ifCond user.id sessionUser.id}}
       <a class="btn btn-primary" href="/users/{{../user.id}}/edit">edit</a>
       {{/ifCond}}
       {{#ifCond user.id sessionUser.id}}
