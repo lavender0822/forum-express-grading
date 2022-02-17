@@ -15,11 +15,13 @@
                     </li>
                     {{/ifAdmin}}
                     <li class="nav-item d-inline-flex align-items-center">
-                        <span class="text-white nav-link">{{#sessionJudge user sessionUser}} {{ ../sessionUser.name }} {{else}}
+                        <span class="text-white nav-link">{{#sessionJudge user sessionUser}} {{ ../sessionUser.name }}
+                            {{else}}
                             {{ ../user.name }} {{/sessionJudge}}</span>
                     </li>
                     <li class="nav-item">
-                        <a href="/users/{{user.id}}" class="nav-link">Profile</a>
+                        <a href="/users/{{#sessionJudge user sessionUser}} {{ ../sessionUser.id }} {{else}}
+                            {{ ../user.id }} {{/sessionJudge}}" class="nav-link">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a href="/logout"><button class="btn btn-outline-success my-sm-0 my-2">Logout</button></a>

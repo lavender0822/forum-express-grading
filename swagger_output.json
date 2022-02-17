@@ -1,0 +1,169 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "餐廳論壇 API",
+    "description": "在前後端分離情境下建造的 API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api-doc",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "使用者 router"
+    },
+    {
+      "name": "Restaurants",
+      "description": "餐廳 router"
+    },
+    {
+      "name": "Favorite",
+      "description": "收藏 router"
+    },
+    {
+      "name": "Followship",
+      "description": "追隨 router"
+    },
+    {
+      "name": "Like",
+      "description": "喜歡 router"
+    },
+    {
+      "name": "Comment  ",
+      "description": "評論 router"
+    },
+    {
+      "name": "Admin ",
+      "description": "管理者 router"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/restaurants": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/restaurants/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/admin/restaurants": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "root"
+        },
+        "email": {
+          "type": "string",
+          "example": "root@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
+    "AddUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "CCC"
+        },
+        "email": {
+          "type": "string",
+          "example": "ccc@ccc.ccc"
+        },
+        "password": {
+          "type": "string",
+          "example": "ccc"
+        }
+      }
+    }
+  }
+}

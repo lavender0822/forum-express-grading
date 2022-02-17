@@ -2,6 +2,9 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
+
 const path = require('path')
 const express = require('express')
 const handlebars = require('express-handlebars')
@@ -34,6 +37,8 @@ app.use((req, res, next) => {
   res.locals.user = getUser(req)
   next()
 })
+
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use('/api', apis)
 app.use(pages)
 
